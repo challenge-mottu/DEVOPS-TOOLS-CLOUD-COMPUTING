@@ -1,0 +1,298 @@
+[
+    {
+        "label": "APIRouter",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "Depends",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "FastAPI",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "Session",
+        "importPath": "sqlalchemy.orm",
+        "description": "sqlalchemy.orm",
+        "isExtraImport": true,
+        "detail": "sqlalchemy.orm",
+        "documentation": {}
+    },
+    {
+        "label": "sessionmaker",
+        "importPath": "sqlalchemy.orm",
+        "description": "sqlalchemy.orm",
+        "isExtraImport": true,
+        "detail": "sqlalchemy.orm",
+        "documentation": {}
+    },
+    {
+        "label": "declarative_base",
+        "importPath": "sqlalchemy.orm",
+        "description": "sqlalchemy.orm",
+        "isExtraImport": true,
+        "detail": "sqlalchemy.orm",
+        "documentation": {}
+    },
+    {
+        "label": "SessionLocal",
+        "importPath": "mottu.database.connection",
+        "description": "mottu.database.connection",
+        "isExtraImport": true,
+        "detail": "mottu.database.connection",
+        "documentation": {}
+    },
+    {
+        "label": "Base",
+        "importPath": "mottu.database.connection",
+        "description": "mottu.database.connection",
+        "isExtraImport": true,
+        "detail": "mottu.database.connection",
+        "documentation": {}
+    },
+    {
+        "label": "SensorData",
+        "importPath": "mottu.database.models",
+        "description": "mottu.database.models",
+        "isExtraImport": true,
+        "detail": "mottu.database.models",
+        "documentation": {}
+    },
+    {
+        "label": "sensor_teste",
+        "importPath": "mottu.api.routes",
+        "description": "mottu.api.routes",
+        "isExtraImport": true,
+        "detail": "mottu.api.routes",
+        "documentation": {}
+    },
+    {
+        "label": "create_engine",
+        "importPath": "sqlalchemy",
+        "description": "sqlalchemy",
+        "isExtraImport": true,
+        "detail": "sqlalchemy",
+        "documentation": {}
+    },
+    {
+        "label": "Column",
+        "importPath": "sqlalchemy",
+        "description": "sqlalchemy",
+        "isExtraImport": true,
+        "detail": "sqlalchemy",
+        "documentation": {}
+    },
+    {
+        "label": "Integer",
+        "importPath": "sqlalchemy",
+        "description": "sqlalchemy",
+        "isExtraImport": true,
+        "detail": "sqlalchemy",
+        "documentation": {}
+    },
+    {
+        "label": "String",
+        "importPath": "sqlalchemy",
+        "description": "sqlalchemy",
+        "isExtraImport": true,
+        "detail": "sqlalchemy",
+        "documentation": {}
+    },
+    {
+        "label": "Float",
+        "importPath": "sqlalchemy",
+        "description": "sqlalchemy",
+        "isExtraImport": true,
+        "detail": "sqlalchemy",
+        "documentation": {}
+    },
+    {
+        "label": "DateTime",
+        "importPath": "sqlalchemy",
+        "description": "sqlalchemy",
+        "isExtraImport": true,
+        "detail": "sqlalchemy",
+        "documentation": {}
+    },
+    {
+        "label": "text",
+        "importPath": "sqlalchemy",
+        "description": "sqlalchemy",
+        "isExtraImport": true,
+        "detail": "sqlalchemy",
+        "documentation": {}
+    },
+    {
+        "label": "datetime",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "SessionLocal",
+        "importPath": "connection",
+        "description": "connection",
+        "isExtraImport": true,
+        "detail": "connection",
+        "documentation": {}
+    },
+    {
+        "label": "get_db",
+        "kind": 2,
+        "importPath": "src.mottu.api.routes.sensor_teste",
+        "description": "src.mottu.api.routes.sensor_teste",
+        "peekOfCode": "def get_db():\n    db = SessionLocal()\n    try:\n        yield db\n    finally:\n        db.close()\n@router.post(\"/sensor\")\ndef criar_sensor(tipo_sensor: str, valor: float, db: Session = Depends(get_db)):\n    dado = SensorData(tipo_sensor=tipo_sensor, valor=valor)\n    db.add(dado)",
+        "detail": "src.mottu.api.routes.sensor_teste",
+        "documentation": {}
+    },
+    {
+        "label": "criar_sensor",
+        "kind": 2,
+        "importPath": "src.mottu.api.routes.sensor_teste",
+        "description": "src.mottu.api.routes.sensor_teste",
+        "peekOfCode": "def criar_sensor(tipo_sensor: str, valor: float, db: Session = Depends(get_db)):\n    dado = SensorData(tipo_sensor=tipo_sensor, valor=valor)\n    db.add(dado)\n    db.commit()\n    db.refresh(dado)\n    return {\"id\": dado.id, \"mensagem\": \"Sensor registrado com sucesso!\"}\n@router.get(\"/sensor\")\ndef listar_sensores(db: Session = Depends(get_db)):\n    sensores = db.query(SensorData).all()\n    return sensores",
+        "detail": "src.mottu.api.routes.sensor_teste",
+        "documentation": {}
+    },
+    {
+        "label": "listar_sensores",
+        "kind": 2,
+        "importPath": "src.mottu.api.routes.sensor_teste",
+        "description": "src.mottu.api.routes.sensor_teste",
+        "peekOfCode": "def listar_sensores(db: Session = Depends(get_db)):\n    sensores = db.query(SensorData).all()\n    return sensores\n@router.delete(\"/sensor/{sensor_id}\")\ndef deletar_sensor(sensor_id: int, db: Session = Depends(get_db)):\n    sensor = db.query(SensorData).filter(SensorData.id == sensor_id).first()\n    if not sensor:\n        return {\"erro\": \"Sensor não encontrado.\"}\n    db.delete(sensor)\n    db.commit()",
+        "detail": "src.mottu.api.routes.sensor_teste",
+        "documentation": {}
+    },
+    {
+        "label": "deletar_sensor",
+        "kind": 2,
+        "importPath": "src.mottu.api.routes.sensor_teste",
+        "description": "src.mottu.api.routes.sensor_teste",
+        "peekOfCode": "def deletar_sensor(sensor_id: int, db: Session = Depends(get_db)):\n    sensor = db.query(SensorData).filter(SensorData.id == sensor_id).first()\n    if not sensor:\n        return {\"erro\": \"Sensor não encontrado.\"}\n    db.delete(sensor)\n    db.commit()\n    return {\"mensagem\": f\"Sensor com ID {sensor_id} deletado com sucesso.\"}",
+        "detail": "src.mottu.api.routes.sensor_teste",
+        "documentation": {}
+    },
+    {
+        "label": "router",
+        "kind": 5,
+        "importPath": "src.mottu.api.routes.sensor_teste",
+        "description": "src.mottu.api.routes.sensor_teste",
+        "peekOfCode": "router = APIRouter()\n# Dependência para injetar sessão\ndef get_db():\n    db = SessionLocal()\n    try:\n        yield db\n    finally:\n        db.close()\n@router.post(\"/sensor\")\ndef criar_sensor(tipo_sensor: str, valor: float, db: Session = Depends(get_db)):",
+        "detail": "src.mottu.api.routes.sensor_teste",
+        "documentation": {}
+    },
+    {
+        "label": "app",
+        "kind": 5,
+        "importPath": "src.mottu.api.main",
+        "description": "src.mottu.api.main",
+        "peekOfCode": "app = FastAPI()\napp.include_router(sensor_teste.router)",
+        "detail": "src.mottu.api.main",
+        "documentation": {}
+    },
+    {
+        "label": "DB_USER",
+        "kind": 5,
+        "importPath": "src.mottu.database.connection",
+        "description": "src.mottu.database.connection",
+        "peekOfCode": "DB_USER = \"pyser\"\nDB_PASSWORD = \"pypass\"\n# DB_HOST = \"localhost\"\nDB_HOST = \"py-mysql\"\nDB_PORT = \"3306\"\nDB_NAME = \"pyDB\"\nDATABASE_URL = f\"mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}\"\n# Criação da engine SQLAlchemy\nengine = create_engine(DATABASE_URL, echo=True)\n# Session para uso com o banco",
+        "detail": "src.mottu.database.connection",
+        "documentation": {}
+    },
+    {
+        "label": "DB_PASSWORD",
+        "kind": 5,
+        "importPath": "src.mottu.database.connection",
+        "description": "src.mottu.database.connection",
+        "peekOfCode": "DB_PASSWORD = \"pypass\"\n# DB_HOST = \"localhost\"\nDB_HOST = \"py-mysql\"\nDB_PORT = \"3306\"\nDB_NAME = \"pyDB\"\nDATABASE_URL = f\"mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}\"\n# Criação da engine SQLAlchemy\nengine = create_engine(DATABASE_URL, echo=True)\n# Session para uso com o banco\nSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)",
+        "detail": "src.mottu.database.connection",
+        "documentation": {}
+    },
+    {
+        "label": "DB_HOST",
+        "kind": 5,
+        "importPath": "src.mottu.database.connection",
+        "description": "src.mottu.database.connection",
+        "peekOfCode": "DB_HOST = \"py-mysql\"\nDB_PORT = \"3306\"\nDB_NAME = \"pyDB\"\nDATABASE_URL = f\"mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}\"\n# Criação da engine SQLAlchemy\nengine = create_engine(DATABASE_URL, echo=True)\n# Session para uso com o banco\nSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)\n# Base para os models\nBase = declarative_base()",
+        "detail": "src.mottu.database.connection",
+        "documentation": {}
+    },
+    {
+        "label": "DB_PORT",
+        "kind": 5,
+        "importPath": "src.mottu.database.connection",
+        "description": "src.mottu.database.connection",
+        "peekOfCode": "DB_PORT = \"3306\"\nDB_NAME = \"pyDB\"\nDATABASE_URL = f\"mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}\"\n# Criação da engine SQLAlchemy\nengine = create_engine(DATABASE_URL, echo=True)\n# Session para uso com o banco\nSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)\n# Base para os models\nBase = declarative_base()",
+        "detail": "src.mottu.database.connection",
+        "documentation": {}
+    },
+    {
+        "label": "DB_NAME",
+        "kind": 5,
+        "importPath": "src.mottu.database.connection",
+        "description": "src.mottu.database.connection",
+        "peekOfCode": "DB_NAME = \"pyDB\"\nDATABASE_URL = f\"mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}\"\n# Criação da engine SQLAlchemy\nengine = create_engine(DATABASE_URL, echo=True)\n# Session para uso com o banco\nSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)\n# Base para os models\nBase = declarative_base()",
+        "detail": "src.mottu.database.connection",
+        "documentation": {}
+    },
+    {
+        "label": "DATABASE_URL",
+        "kind": 5,
+        "importPath": "src.mottu.database.connection",
+        "description": "src.mottu.database.connection",
+        "peekOfCode": "DATABASE_URL = f\"mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}\"\n# Criação da engine SQLAlchemy\nengine = create_engine(DATABASE_URL, echo=True)\n# Session para uso com o banco\nSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)\n# Base para os models\nBase = declarative_base()",
+        "detail": "src.mottu.database.connection",
+        "documentation": {}
+    },
+    {
+        "label": "engine",
+        "kind": 5,
+        "importPath": "src.mottu.database.connection",
+        "description": "src.mottu.database.connection",
+        "peekOfCode": "engine = create_engine(DATABASE_URL, echo=True)\n# Session para uso com o banco\nSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)\n# Base para os models\nBase = declarative_base()",
+        "detail": "src.mottu.database.connection",
+        "documentation": {}
+    },
+    {
+        "label": "SessionLocal",
+        "kind": 5,
+        "importPath": "src.mottu.database.connection",
+        "description": "src.mottu.database.connection",
+        "peekOfCode": "SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)\n# Base para os models\nBase = declarative_base()",
+        "detail": "src.mottu.database.connection",
+        "documentation": {}
+    },
+    {
+        "label": "Base",
+        "kind": 5,
+        "importPath": "src.mottu.database.connection",
+        "description": "src.mottu.database.connection",
+        "peekOfCode": "Base = declarative_base()",
+        "detail": "src.mottu.database.connection",
+        "documentation": {}
+    },
+    {
+        "label": "SensorData",
+        "kind": 6,
+        "importPath": "src.mottu.database.models",
+        "description": "src.mottu.database.models",
+        "peekOfCode": "class SensorData(Base):\n    __tablename__ = \"T_CM_POSICAO_MOTO\"\n    id_posicao = Column(String(64),name= 'ID_POSICAO', primary_key=True)\n    id_dispositivo = Column(Integer, name=\"ID_DISPOSITIVO\", nullable=False)\n    id_patio = Column(Integer, name=\"ID_PATIO\", nullable=False)\n    vl_coordx = Column(Float, name=\"VL_COORDX\", nullable=False)\n    vl_coordy = Column(Float, name=\"VL_COORDY\", nullable=False)\n    dt_registro = Column(DateTime, name=\"DT_REGISTRO\", nullable=False, default=datetime.now())\n    ds_setor = Column(String(50), name=\"DS_SETOR\", nullable=True)",
+        "detail": "src.mottu.database.models",
+        "documentation": {}
+    }
+]

@@ -1,0 +1,21 @@
+# Dockerfile
+FROM python:3.11-slim
+
+# Diretório de trabalho
+WORKDIR /app
+
+# Copia os arquivos do projeto
+COPY ./src /app/src
+COPY requirements.txt .
+
+ENV PYTHONPATH=/app/src
+
+# Instala as dependências
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Expõe a porta da aplicação
+EXPOSE 8000
+
+# Comando para iniciar o FastAPI
+CMD ["uvicorn", "mottu.api.main:app", "--host", "0.0.0.0", "--port", "8000"]
+
